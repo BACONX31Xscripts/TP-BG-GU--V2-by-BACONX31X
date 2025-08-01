@@ -1,80 +1,56 @@
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
+local GroupId = 34767504
 
-if not player:IsInGroup(34767504) then return end
+local playerGui = player:WaitForChild("PlayerGui")
 
-local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 300, 0, 140)
-frame.Position = UDim2.new(0.5, -150, 0.5, -70)
-frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-frame.Active = true
-frame.Draggable = true
+local keyGui = Instance.new("ScreenGui", playerGui)
+local frame = Instance.new("Frame", keyGui)
+frame.Size = UDim2.new(0, 300, 0, 120)
+frame.Position = UDim2.new(0.5, -150, 0.5, -60)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
 
-local toggle = Instance.new("TextButton", frame)
-toggle.Size = UDim2.new(0, 30, 0, 30)
-toggle.Position = UDim2.new(1, -35, 0, 5)
-toggle.Text = "-"
-toggle.Font = Enum.Font.SourceSansBold
-toggle.TextSize = 22
-toggle.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
-toggle.TextColor3 = Color3.new(0, 0, 0)
+local title = Instance.new("TextLabel", frame)
+title.Text = "Join CG DEISG Group (By BACONX31X)"
+title.Size = UDim2.new(1, 0, 0, 30)
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 20
 
-local nameBox = Instance.new("TextBox", frame)
-nameBox.Size = UDim2.new(1, -40, 0, 35)
-nameBox.Position = UDim2.new(0, 10, 0, 10)
-nameBox.PlaceholderText = "Name"
-nameBox.Font = Enum.Font.SourceSans
-nameBox.TextSize = 20
-nameBox.TextColor3 = Color3.new(0,0,0)
-nameBox.ClearTextOnFocus = false
+local joinButton = Instance.new("TextButton", frame)
+joinButton.Text = "I Joined ✅"
+joinButton.Size = UDim2.new(0.5, -10, 0, 40)
+joinButton.Position = UDim2.new(0, 10, 0, 50)
+joinButton.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+joinButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+joinButton.Font = Enum.Font.SourceSansBold
+joinButton.TextSize = 22
 
-local bring = Instance.new("TextButton", frame)
-bring.Size = UDim2.new(0.45, -10, 0, 40)
-bring.Position = UDim2.new(0, 10, 0, 60)
-bring.Text = "Bring"
-bring.Font = Enum.Font.SourceSansBold
-bring.TextSize = 22
-bring.BackgroundColor3 = Color3.fromRGB(100, 150, 255)
-bring.TextColor3 = Color3.new(1, 1, 1)
+local messageLabel = Instance.new("TextLabel", frame)
+messageLabel.Size = UDim2.new(1, 0, 0, 30)
+messageLabel.Position = UDim2.new(0, 0, 1, -30)
+messageLabel.BackgroundTransparency = 1
+messageLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+messageLabel.Font = Enum.Font.SourceSansBold
+messageLabel.TextSize = 18
+messageLabel.Text = ""
 
-local tp = Instance.new("TextButton", frame)
-tp.Size = UDim2.new(0.45, -10, 0, 40)
-tp.Position = UDim2.new(0.55, 0, 0, 60)
-tp.Text = "Teleport"
-tp.Font = Enum.Font.SourceSansBold
-tp.TextSize = 22
-tp.BackgroundColor3 = Color3.fromRGB(100, 200, 150)
-tp.TextColor3 = Color3.new(1, 1, 1)
-
-local minimized = false
-toggle.MouseButton1Click:Connect(function()
-    minimized = not minimized
-    nameBox.Visible = not minimized
-    bring.Visible = not minimized
-    tp.Visible = not minimized
-    toggle.Text = minimized and "+" or "-"
-    frame.Size = minimized and UDim2.new(0, 60, 0, 40) or UDim2.new(0, 300, 0, 140)
-end)
-
-local function getPlayer(name)
-    for _, p in pairs(Players:GetPlayers()) do
-        if p.Name:lower() == name:lower() then
-            return p
-        end
+local function checkGroup()
+    if player:IsInGroup(GroupId) then
+        keyGui:Destroy()
+        -- Script devamı buraya
+    else
+        messageLabel.Text = "You did not participate ❌"
+        wait(5)
+        messageLabel.Text = ""
     end
 end
 
-bring.MouseButton1Click:Connect(function()
-    local target = getPlayer(nameBox.Text)
-    if target and target.Character and player.Character and target.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("HumanoidRootPart") then
-        target.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(3, 0, 0)
-    end
-end)
+joinButton.MouseButton1Click:Connect(checkGroup)
 
-tp.MouseButton1Click:Connect(function()
-    local target = getPlayer(nameBox.Text)
-    if target and target.Character and player.Character and target.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("HumanoidRootPart") then
-        player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame + Vector3.new(3, 0, 0)
-    end
-end)
+if player:IsInGroup(GroupId) then
+    keyGui:Destroy()
+    -- Script devamı buraya
+end
